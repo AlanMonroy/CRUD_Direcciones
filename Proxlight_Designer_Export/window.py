@@ -21,21 +21,21 @@ canvas.place(x = 0, y = 0)
 
 background_img = PhotoImage(file = f"background.png")
 background = canvas.create_image(
-    683.0, 384.0,
+    683.0, 35.0,
     image=background_img)
 
-img0 = PhotoImage(file = f"barra_menu.png")
+img0 = PhotoImage(file = f"img0.png")
 b0 = Button(
     image = img0,
     borderwidth = 0,
     highlightthickness = 0,
     command = btn_clicked,
-    relief = "flat",activebackground="#16660A")
+    relief = "flat")
 
 b0.place(
-    x = 5, y = 5,
-    width = 90,
-    height = 90)
+    x = 0, y = 0,
+    width = 70,
+    height = 70)
 
 window.resizable(False, False)
 window.mainloop()
