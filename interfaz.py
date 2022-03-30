@@ -60,15 +60,6 @@ class Interfaz:
 			self.boton_desplegable3.grid(row=3,column=0, padx=10, pady=10)
 			self.boton_desplegable3.bind("<Button-1>", self.ir_pantalla)
 
-	def leer_info(self):
-		datos=leer()
-		data = datos.data
-
-		if len(data) != 0:
-			for i in data:
-				self.tabla.insert(parent="",index="end", text="", values=(i["nombre"],i["telefono"],
-					i["sucursal"],i["fecha_ingreso"],i["supervisor"],i["gerente"]))
-
 	#Pantalla MENU
 	def menu(self):
 		self.window.title("Menú")
@@ -130,7 +121,7 @@ class Interfaz:
 		self.tabla.heading("Supervisor",text="Supervisor",anchor=CENTER)
 		self.tabla.heading("Gerente",text="Gerente",anchor=CENTER)
 
-		self.tabla.grid(row=1,column=2,padx=20,pady=20,rowspan=self.h, sticky="n")
+		self.tabla.grid(row=2,column=2,padx=20,pady=20,rowspan=self.h, sticky="n")
 
 		self.leer_info()
 
@@ -192,13 +183,6 @@ class Interfaz:
 		self.boton2.grid(row=5,column=1, padx=10, pady=10)
 		self.boton2.bind("<Button-1>", self.ir_pantalla)
 
-	#Opciones pop menu
-	def agregar(self):
-		for i in range(10):
-			self.diagrama = ttk.Button(self.frame_dis, command=self.regresar_menu)
-			self.diagrama.grid(row=0,column=i, padx=10, pady=10)
-
-
 	def pantalla_registro(self):
 		self.top=Toplevel()
 		self.top.grab_set()
@@ -207,19 +191,6 @@ class Interfaz:
 		self.top.resizable(False, True)
 		self.top.configure(bg="#ECE7EB")
 
-		#self.top.configure(background="white")
-		#self.canvas2 = Canvas(self.top,bg = "#ffffff",height = 600,width = 450,bd = 0,highlightthickness = 0,relief = "ridge")
-		#self.canvas2.place(x = 0, y = 0)
-
-		#self.bg_ventanaExtra = PhotoImage(file = f"images/bg_extra.png")
-		#background = self.canvas2.create_image(224.0, 300.0,image=self.bg_ventanaExtra)
-		#self.entry0_img = PhotoImage(file = f"images/img_textBox0.png")
-		#----------------------------------------Entry's-------------------------------------------------#
-		#extra_entry0_bg = self.canvas2.create_image(256.0, 144.0, image = self.entry0_img)
-		#self.extra_plan = Entry(self.top,bd = 0,bg = "#c4c4c4",highlightthickness = 0,font = ("Tahoma", 12))
-		
-		#estilo=ttk.Style()
-		#estilo.configure("d.TEntry")
 		estilo = ttk.Style()
 		estilo.configure("1.TLabel",foreground="black",font = ("Tahoma", 12),background="#ECE7EB")
 		label1 = ttk.Label(self.top,text="Nombre de empleado",style="1.TLabel").grid(row=0, column=0,padx=10,pady=10)
@@ -255,10 +226,14 @@ class Interfaz:
 		boton2 = ttk.Button(self.top, text="Continuar registrando")
 		boton2.grid(row=7,column=1, padx=10, pady=10)
 
-        #----------------------------------Boton-------------------------------------
-        #self.extra_img0 = PhotoImage(file = f"images/img_actualizar.png")
-        #extra_boton_actualizar = Button(self.top,image = self.extra_img0,command=self.actualizar,borderwidth = 0,highlightthickness = 0,relief = "flat",curso="hand2",bg="#59B04C",activebackground="#59B04C")
-        #extra_boton_actualizar.place(x = 184, y = 496,width = 100,height = 35)
+	def leer_info(self):
+		objeto=leer()
+		data = objeto.ordernar_por_nombre()
+
+		if len(data) != 0:
+			for i in data:
+				self.tabla.insert(parent="",index="end", text="", values=(i["nombre"],i["telefono"],
+					i["sucursal"],i["fecha_ingreso"],i["supervisor"],i["gerente"]))
 
 
 if __name__ == "__main__":
