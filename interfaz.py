@@ -1,7 +1,8 @@
 from tkinter import *
-from tkinter import ttk
+from tkinter import ttk, messagebox
 from ttkthemes import ThemedTk
-from leer_json import leer
+from info_conexion import info
+import pyodbc
 
 class Interfaz:
 	def __init__(self, window):
@@ -220,20 +221,39 @@ class Interfaz:
 		sep = ttk.Separator(self.top,orient="horizontal")
 		sep.grid(row=6,column=0,columnspan=2, padx=20, sticky="ew")
 
-		boton1 = ttk.Button(self.top, text="Registrar y terminar")
+		boton1 = ttk.Button(self.top, text="Registrar y terminar", command=self.registrar)
 		boton1.grid(row=7,column=0, padx=10, pady=10)
 
 		boton2 = ttk.Button(self.top, text="Continuar registrando")
 		boton2.grid(row=7,column=1, padx=10, pady=10)
 
 	def leer_info(self):
-		objeto=leer()
-		data = objeto.ordernar_por_nombre()
+		self.tabla.delete(*self.tabla.get_children())
+		objeto=info()
+		data = objeto.orden_nombres()
 
-		if len(data) != 0:
+		if len(data) !=0:
 			for i in data:
-				self.tabla.insert(parent="",index="end", text="", values=(i["nombre"],i["telefono"],
-					i["sucursal"],i["fecha_ingreso"],i["supervisor"],i["gerente"]))
+				self.tabla.insert(parent="",index="end", text="", values=(i[1],
+					i[2],i[3],i[4],i[5],i[6]))
+
+	def registrar(self):
+		if self.registrar_nombre.get() != "" and self.registrar_telefono.get() !="" and self.registrar_sucursal != "" and self.registrar_fecha.get() != "" and self.registrar_supervisor.get() != "" and self.registrar_gerente.get() != 0:
+			objeto=info()
+			objeto.agregar_elementos(self.registrar_nombre.get(),self.registrar_telefono.get(),
+				self.registrar_sucursal.get(),self.registrar_fecha.get(),
+				self.registrar_supervisor.get(),self.registrar_gerente.get())
+
+			self.registrar_nombre.delete(0, END); self.registrar_telefono.delete(0, END)
+			self.registrar_sucursal.delete(0, END); self.registrar_fecha.delete(0, END)
+			self.registrar_supervisor.delete(0, END); self.registrar_gerente.delete(0, END)
+			messagebox.showinfo("Completado","Actualizacion de datos  completada.")
+			self.leer_info()
+           	#self.checar_nombre()
+            #if self.checar_nombre==True:
+            #messagebox.showinfo("Error","El valor Clave ya esta registrado en la base de datos.")
+		else:
+			messagebox.showinfo("Error","Debe llenar todos los apartados.")
 
 
 if __name__ == "__main__":
