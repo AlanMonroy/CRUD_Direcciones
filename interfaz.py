@@ -7,11 +7,12 @@ import pyodbc
 class Interfaz:
 	def __init__(self, window):
 		self.window = window
-		self.conteo_menu = 0
+		self.conteo_menu = 0  #Importante, no que hace exactamente pero es para control de pantallas
 		self.x = 0; self.y = 0
 		self.w, self.h = self.window.winfo_screenwidth(), self.window.winfo_screenheight() 
 		self.window.geometry("%dx%d+%d+%d" % (self.w, self.h, self.x, self.y))
 		self.window.state("zoomed")
+		self.window.iconbitmap('images/icono.ico')
 
 		self.menu()
 
@@ -24,7 +25,7 @@ class Interfaz:
 	def ir_pantalla(self, event):
 		self.conteo_menu=0
 		match event.widget:
-			case self.boton1 | self.boton_desplegable1: 
+			case self.boton_desplegable1: 
 				self.mainFrame.destroy()
 				self.opcion1()
 
@@ -86,6 +87,9 @@ class Interfaz:
 		cuartoFrame = Frame(secondFrame, bg="black", height=self.h)
 		cuartoFrame.grid(row=1,column=0,rowspan=self.h)
 
+		#secondFrame.columnconfigure(0, weight=1)
+		#secondFrame.rowconfigure(0, weight=1)
+
 		#label1 = Label(tercerFrame,text="Menú").pack()
 		self.img0 = PhotoImage(file = f"images/barra_menu.png")
 		self.boton_menu = Button(secondFrame,
@@ -96,8 +100,22 @@ class Interfaz:
             relief = "flat", activebackground="black", bg="black", curso="hand2")
 		self.boton_menu.grid(row=0,column=1)
 
-		self.boton1 = ttk.Button(secondFrame, text=f"Registrar", command=self.pantalla_registro)
-		self.boton1.grid(row=1,column=1, padx=10, pady=10)
+		self.boton_registrar_001 = ttk.Button(secondFrame, text=f"Registrar")
+		self.boton_registrar_001.grid(row=1,column=1, padx=10, pady=10)
+		self.boton_registrar_001.bind("<Button-1>", self.pantalla_registro)
+
+		self.img_ButtonEditar = PhotoImage(file = f"images/img_editar.png") #Boton editar
+		self.ButtonEditar = Button(secondFrame,
+			image = self.img_ButtonEditar, curso= "hand2",
+			borderwidth = 0,highlightthickness = 0, relief = "flat", bg="white", activebackground="white")
+		self.ButtonEditar.grid(row=2,column=1, padx=10, pady=10)
+		self.ButtonEditar.bind("<Button-1>", self.pantalla_registro)
+
+		self.img_ButtonEliminarRegistro = PhotoImage(file = f"images/img_eliminar.png") #Boton Eliminar
+		self.ButtonEliminarRegistro = Button(secondFrame,
+			image = self.img_ButtonEliminarRegistro, command=self.eliminar_registro, curso= "hand2",
+			borderwidth = 0, highlightthickness = 0, relief = "flat", bg="white", activebackground="white")
+		self.ButtonEliminarRegistro.grid(row=3,column=1, padx=10, pady=10)
 
 		#--------------------------------------Tabla------------------------------------------------------------#
 		style = ttk.Style()
@@ -122,32 +140,9 @@ class Interfaz:
 		self.tabla.heading("Supervisor",text="Supervisor",anchor=CENTER)
 		self.tabla.heading("Gerente",text="Gerente",anchor=CENTER)
 
-		self.tabla.grid(row=2,column=2,padx=20,pady=20,rowspan=self.h, sticky="n")
+		self.tabla.grid(row=2,column=2,rowspan=self.h, sticky="n")
 
 		self.leer_info()
-
-		"""def pop_menu(event):
-			menu.tk_popup(event.x_root,event.y_root)
-
-		#Seccion de diseño (cuadro de diseño)
-		estilo=ttk.Style()
-		estilo.configure("d.TFrame",background="white",borderwidth=2,relief="ridge")
-		self.frame_dis =ttk.Frame(secondFrame,style="d.TFrame",width=self.w*.80,height=self.h*.70)
-		self.frame_dis.grid(row=1,column=2,columnspan=self.w, rowspan=self.h, sticky="n",pady=30,padx=5)
-		self.frame_dis.grid_propagate(False)
-		#self.canvas_div = Frame(frame_dis)
-		#self.canvas_div.pack()
-
-		menu = Menu(self.frame_dis, tearoff=0, bg="black", fg="white")
-		menu.add_command(label="Agregar", command=self.agregar)
-		menu.add_command(label="Copy")
-		menu.add_command(label="Cut")
-		menu.add_separator()
-		menu.add_command(label="Paste")
-		menu.add_command(label="Select all")
-
-		self.frame_dis.bind("<Button-3>", pop_menu)"""
-
 
 	#Pantalla Opcion1
 	def opcion1(self):
@@ -184,49 +179,76 @@ class Interfaz:
 		self.boton2.grid(row=5,column=1, padx=10, pady=10)
 		self.boton2.bind("<Button-1>", self.ir_pantalla)
 
-	def pantalla_registro(self):
+	#Pantalla TopLevel Registro	
+	def pantalla_registro(self, event):
 		self.top=Toplevel()
 		self.top.grab_set()
 		self.top.transient(master=None)
-		self.top.title("Registrar")
 		self.top.resizable(False, True)
-		self.top.configure(bg="#ECE7EB")
+		self.top.geometry("450x350")
+		self.top.configure(bg = "#ffffff")
+		self.canvas = Canvas(
+		    self.top,
+		    bg = "#ffffff",
+		    height = 350,
+		    width = 450,
+		    bd = 0,
+		    highlightthickness = 0,
+		    relief = "ridge")
+		self.canvas.place(x = 0, y = 0)
 
-		estilo = ttk.Style()
-		estilo.configure("1.TLabel",foreground="black",font = ("Tahoma", 12),background="#ECE7EB")
-		label1 = ttk.Label(self.top,text="Nombre de empleado",style="1.TLabel").grid(row=0, column=0,padx=10,pady=10)
-		self.registrar_nombre = ttk.Entry(self.top, style="d.TEntry", width=40)
-		self.registrar_nombre.grid(row=0,column=1, padx=10,pady=10)
+		self.background_img01 = PhotoImage(file = f"images/background.png")
+		background = self.canvas.create_image(225.0, 175.0,image=self.background_img01)
 
-		label2 = ttk.Label(self.top,text="Teléfono",style="1.TLabel").grid(row=1, column=0,padx=10,pady=10)
-		self.registrar_telefono = ttk.Entry(self.top, style="d.TEntry", width=40)
-		self.registrar_telefono.grid(row=1,column=1, padx=10,pady=10)
+		self.entry0_img = PhotoImage(file = f"images/img_textBox1.png")
 
-		label3 = ttk.Label(self.top,text="Sucursal",style="1.TLabel").grid(row=2, column=0,padx=10,pady=10)
-		self.registrar_sucursal = ttk.Entry(self.top, style="d.TEntry", width=40)
-		self.registrar_sucursal.grid(row=2,column=1, padx=10,pady=10)
+		entry4_bg = self.canvas.create_image(294.5, 34.5,image = self.entry0_img)
+		self.registrar_nombre = Entry(self.top,bd = 0,bg = "#ffffff",highlightthickness = 0)
+		self.registrar_nombre.place(x = 189.0, y = 24,width = 211.0,height = 23)
 
-		label4 = ttk.Label(self.top,text="Fecha de ingreso",style="1.TLabel").grid(row=3, column=0,padx=10,pady=10)
-		self.registrar_fecha = ttk.Entry(self.top, style="d.TEntry", width=40)
-		self.registrar_fecha.grid(row=3,column=1, padx=10,pady=10)
+		entry5_bg = self.canvas.create_image(294.5, 74.5,image = self.entry0_img)
+		self.registrar_telefono = Entry(self.top,bd = 0,bg = "#ffffff",highlightthickness = 0)
+		self.registrar_telefono.place(x = 189.0, y = 64,width = 211.0,height = 23)
 
-		label5 = ttk.Label(self.top,text="Supervisor",style="1.TLabel").grid(row=4, column=0,padx=10,pady=10)
-		self.registrar_supervisor = ttk.Entry(self.top, style="d.TEntry", width=40)
-		self.registrar_supervisor.grid(row=4,column=1, padx=10,pady=10)
+		entry3_bg = self.canvas.create_image(294.5, 114.5,image = self.entry0_img)
+		self.registrar_sucursal = Entry(self.top,bd = 0,bg = "#ffffff",highlightthickness = 0)
+		self.registrar_sucursal.place(x = 189.0, y = 104,width = 211.0,height = 23)
 
-		label6 = ttk.Label(self.top,text="Gerente",style="1.TLabel").grid(row=5, column=0,padx=10,pady=10)
-		self.registrar_gerente = ttk.Entry(self.top, style="d.TEntry", width=40)
-		self.registrar_gerente.grid(row=5,column=1, padx=10,pady=10)
+		entry0_bg = self.canvas.create_image(294.5, 154.5,image = self.entry0_img)
+		self.registrar_fecha = Entry(self.top,bd = 0,bg = "#ffffff",highlightthickness = 0)
+		self.registrar_fecha.place(x = 189.0, y = 144,width = 211.0,height = 23)
 
-		sep = ttk.Separator(self.top,orient="horizontal")
-		sep.grid(row=6,column=0,columnspan=2, padx=20, sticky="ew")
+		entry1_bg = self.canvas.create_image(294.5, 194.5,image = self.entry0_img)
+		self.registrar_supervisor = Entry(self.top,bd = 0,bg = "#ffffff",highlightthickness = 0)
+		self.registrar_supervisor.place(x = 189.0, y = 184,width = 211.0,height = 23)
 
-		boton1 = ttk.Button(self.top, text="Registrar y terminar", command=self.registrar)
-		boton1.grid(row=7,column=0, padx=10, pady=10)
+		entry2_bg = self.canvas.create_image(294.5, 236.5,image = self.entry0_img)
+		self.registrar_gerente = Entry(self.top,bd = 0,bg = "#ffffff",highlightthickness = 0)
+		self.registrar_gerente.place(x = 189.0, y = 224,width = 211.0,height = 23)
 
-		boton2 = ttk.Button(self.top, text="Continuar registrando")
-		boton2.grid(row=7,column=1, padx=10, pady=10)
+		match event.widget:
+			case self.boton_registrar_001:
+				self.top.title("Registrar")
+				self.img01 = PhotoImage(file = f"images/r1.png")
+				self.b_r001 = Button(self.top,image = self.img01,borderwidth = 0,highlightthickness = 0,relief = "flat",bg="#E5E4E4",
+				    activebackground="#E5E4E4", cursor="hand2")
+				self.b_r001.place(x = 50, y = 297,width = 140,height = 28)
+				self.b_r001.bind("<Button-1>", self.registrar)
 
+				self.img11 = PhotoImage(file = f"images/r2.png")
+				self.b_r002 = Button(self.top,image = self.img11,borderwidth = 0,highlightthickness = 0,relief = "flat",bg="#E5E4E4",
+				    activebackground="#E5E4E4", cursor="hand2")
+				self.b_r002.place(x = 260, y = 297,width = 140,height = 28)
+				self.b_r002.bind("<Button-1>", self.registrar)
+
+			case self.ButtonEditar:
+				self.top.title("Editar")
+				self.img21 = PhotoImage(file = f"images/r3.png")
+				self.b_actualizar = Button(self.top,image = self.img21,borderwidth = 0,highlightthickness = 0,relief = "flat",bg="#E5E4E4",
+					activebackground="#E5E4E4", cursor="hand2")
+				self.b_actualizar.place(x = 155, y = 297,width = 140,height = 28)
+
+#Funciones
 	def leer_info(self):
 		self.tabla.delete(*self.tabla.get_children())
 		objeto=info()
@@ -237,23 +259,45 @@ class Interfaz:
 				self.tabla.insert(parent="",index="end", text="", values=(i[1],
 					i[2],i[3],i[4],i[5],i[6]))
 
-	def registrar(self):
+	def registrar(self, event):
 		if self.registrar_nombre.get() != "" and self.registrar_telefono.get() !="" and self.registrar_sucursal != "" and self.registrar_fecha.get() != "" and self.registrar_supervisor.get() != "" and self.registrar_gerente.get() != 0:
 			objeto=info()
-			objeto.agregar_elementos(self.registrar_nombre.get(),self.registrar_telefono.get(),
-				self.registrar_sucursal.get(),self.registrar_fecha.get(),
-				self.registrar_supervisor.get(),self.registrar_gerente.get())
+			compromar_001 = objeto.checar_nombre(self.registrar_nombre.get())
+			if compromar_001:
+				messagebox.showinfo("Error","El empleado ya esta registrado en la base de datos.")
+			else:
+				objeto.agregar_elementos(self.registrar_nombre.get(),self.registrar_telefono.get(),
+					self.registrar_sucursal.get(),self.registrar_fecha.get(),
+					self.registrar_supervisor.get(),self.registrar_gerente.get())
 
-			self.registrar_nombre.delete(0, END); self.registrar_telefono.delete(0, END)
-			self.registrar_sucursal.delete(0, END); self.registrar_fecha.delete(0, END)
-			self.registrar_supervisor.delete(0, END); self.registrar_gerente.delete(0, END)
-			messagebox.showinfo("Completado","Actualizacion de datos  completada.")
-			self.leer_info()
-           	#self.checar_nombre()
-            #if self.checar_nombre==True:
-            #messagebox.showinfo("Error","El valor Clave ya esta registrado en la base de datos.")
+				self.registrar_nombre.delete(0, END); self.registrar_telefono.delete(0, END)
+				self.registrar_sucursal.delete(0, END); self.registrar_fecha.delete(0, END)
+				self.registrar_supervisor.delete(0, END); self.registrar_gerente.delete(0, END)
+				messagebox.showinfo("Completado","Actualizacion de datos  completada.")
+				self.leer_info()
 		else:
 			messagebox.showinfo("Error","Debe llenar todos los apartados.")
+
+		match event.widget:
+			case self.b_r001:
+				self.top.destroy()
+			case self.b_r002:
+				pass
+
+	def eliminar_registro(self):
+		seleccion = self.tabla.focus()
+		values = self.tabla.item(seleccion,"values")
+
+		if values =="":
+			messagebox.showinfo("Error","No ha seleccionado un registro")
+		else:
+			decision2=messagebox.askquestion("Confirmar","¿Seguro que quieres eliminar el registro?")
+			if decision2 == "yes":
+				valor_eliminar = values[0]
+				objeto=info()
+				objeto.eliminar(valor_eliminar)
+				messagebox.showinfo("Completado","Registro eliminado.")
+				self.leer_info()
 
 
 if __name__ == "__main__":
