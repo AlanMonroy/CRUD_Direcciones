@@ -1,24 +1,29 @@
-from tkinter import *
-from tkinter import ttk
+lista = [(1,"Alan","epa","ke onda"),(2,"ana","no ma","chingas")]
+valor_busqueda = "a"
 
-ventana = Tk()
-ventana.geometry("500x500")
+for i in lista:
+    for a in i:
+        b=str(a)
+        #objeto = b.find(valor_busqueda)
+        objeto=b[:len(valor_busqueda)].find(valor_busqueda)
+        if objeto != -1:
+            print(i)
 
-def pop_menu(event):
-    menu.tk_popup(event.x_root,event.y_root)
+"""for i in lista: #la tupla
+    for a in i: #la cadena
+        b=str(a) #cadena en str
+        if incremento != longitud:
+            valor2+=b
+            print(valor2)
+            incremento+=1
+        incremento=0
+        print("VALOR 1: ",valor_busqueda.lower()); print("VALOR 2: ",valor2.lower())
+        if valor_busqueda.lower() == valor2.lower():
+            print("encontrado",i)
+            print("encontrado",b.lower())
+            print("-----------------------------------------------------------------------")
+        valor2="""
 
-estilo=ttk.Style()
-estilo.configure("d.TFrame",background="white",borderwidth=2,relief="ridge")
-frame =ttk.Frame(ventana,style="d.TFrame",width=200,height=300)
-frame.grid(row=1,column=1)
-menu = Menu(frame, tearoff=0, bg="black", fg="white")
-menu.add_command(label="Copy")
-menu.add_command(label="Cut")
-menu.add_separator()
-menu.add_command(label="Paste")
-menu.add_command(label="Select all")
 
-frame.bind("<Button-3>", pop_menu)
-ventana.mainloop()
 
 

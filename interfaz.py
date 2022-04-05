@@ -50,15 +50,15 @@ class Interfaz:
 			tercerFrame.grid(row=0,column=0, sticky="e")
 
 			#ttk.Style().configure("TButton", padding=6, relief="flat",background="black")
-			self.boton_desplegable1 = ttk.Button(canvas, text=f"Registrar")
+			self.boton_desplegable1 = ttk.Button(canvas, text=f"No disponible")
 			self.boton_desplegable1.grid(row=1,column=0, padx=10, pady=10)
-			self.boton_desplegable1.bind("<Button-1>", self.ir_pantalla)
+			#self.boton_desplegable1.bind("<Button-1>", self.ir_pantalla)
 
-			self.boton_desplegable2 = ttk.Button(canvas, text=f"leer_info", command=self.leer_info)
+			self.boton_desplegable2 = ttk.Button(canvas, text=f"No disponible")
 			self.boton_desplegable2.grid(row=2,column=0, padx=10, pady=10)
 			#self.boton_desplegable2.bind("<Button-1>", self.ir_pantalla)
 
-			self.boton_desplegable3 = ttk.Button(canvas, text=f"Opcion1")
+			self.boton_desplegable3 = ttk.Button(canvas, text=f"No disponible")
 			self.boton_desplegable3.grid(row=3,column=0, padx=10, pady=10)
 			self.boton_desplegable3.bind("<Button-1>", self.ir_pantalla)
 
@@ -87,10 +87,10 @@ class Interfaz:
 		cuartoFrame = Frame(secondFrame, bg="black", height=self.h)
 		cuartoFrame.grid(row=1,column=0,rowspan=self.h)
 
-		#secondFrame.columnconfigure(0, weight=1)
-		#secondFrame.rowconfigure(0, weight=1)
+		#Frame separator
+		quintoFrame = Frame(secondFrame, bg="#E5E4E4", height=self.h, width=2)
+		quintoFrame.grid(row=1,column=2,rowspan=self.h)
 
-		#label1 = Label(tercerFrame,text="Menú").pack()
 		self.img0 = PhotoImage(file = f"images/barra_menu.png")
 		self.boton_menu = Button(secondFrame,
             image = self.img0,
@@ -103,6 +103,13 @@ class Interfaz:
 		self.boton_registrar_001 = ttk.Button(secondFrame, text=f"Registrar")
 		self.boton_registrar_001.grid(row=1,column=1, padx=10, pady=10)
 		self.boton_registrar_001.bind("<Button-1>", self.pantalla_registro)
+
+		#self.b_buscar_001 = ttk.Button(secondFrame, text=f"Buscar", command=self.buscar)
+		#self.b_buscar_001.grid(row=1,column=4, padx=10, pady=10)
+
+		self.buscador = ttk.Entry(secondFrame, width=50)
+		self.buscador.grid(row=1,column=3, padx=20,pady=10)
+		self.buscador.bind("<KeyRelease>",self.buscar)
 
 		self.img_ButtonEditar = PhotoImage(file = f"images/img_editar.png") #Boton editar
 		self.ButtonEditar = Button(secondFrame,
@@ -123,8 +130,9 @@ class Interfaz:
 		style.map("Treeview", background=[("selected","#38022D")])
 
 		self.tabla = ttk.Treeview(secondFrame)
-		self.tabla["columns"] = ("Nombre de empleado","Teléfono","Sucursal","Fecha de ingreso","Supervisor","Gerente")
+		self.tabla["columns"] = ("ID","Nombre de empleado","Teléfono","Sucursal","Fecha de ingreso","Supervisor","Gerente")
 		self.tabla.column("#0",width=0,stretch=NO)
+		self.tabla.column("ID",anchor=CENTER,width=50)
 		self.tabla.column("Nombre de empleado",anchor=CENTER,width=200)
 		self.tabla.column("Teléfono",anchor=CENTER,width=100)
 		self.tabla.column("Sucursal",anchor=CENTER,width=200)
@@ -133,6 +141,7 @@ class Interfaz:
 		self.tabla.column("Gerente",anchor=CENTER,width=200)
 
 		self.tabla.heading("#0",text="",anchor=CENTER)
+		self.tabla.heading("ID",text="ID",anchor=CENTER)
 		self.tabla.heading("Nombre de empleado",text="Nombre de empleado",anchor=CENTER)
 		self.tabla.heading("Teléfono",text="Teléfono",anchor=CENTER)
 		self.tabla.heading("Sucursal",text="Sucursal",anchor=CENTER)
@@ -140,12 +149,12 @@ class Interfaz:
 		self.tabla.heading("Supervisor",text="Supervisor",anchor=CENTER)
 		self.tabla.heading("Gerente",text="Gerente",anchor=CENTER)
 
-		self.tabla.grid(row=2,column=2,rowspan=self.h, sticky="n")
+		self.tabla.grid(row=2,column=3,rowspan=self.h, columnspan=self.w,sticky="nw",padx=10)
 
 		self.leer_info()
 
 	#Pantalla Opcion1
-	def opcion1(self):
+	def opcion1(self): #No sirve, solo crea una nueva pagina
 		self.window.title("Registro")
 		self.mainFrame=Frame(self.window)
 		self.mainFrame.pack(fill=BOTH, expand=1)
@@ -187,14 +196,7 @@ class Interfaz:
 		self.top.resizable(False, True)
 		self.top.geometry("450x350")
 		self.top.configure(bg = "#ffffff")
-		self.canvas = Canvas(
-		    self.top,
-		    bg = "#ffffff",
-		    height = 350,
-		    width = 450,
-		    bd = 0,
-		    highlightthickness = 0,
-		    relief = "ridge")
+		self.canvas = Canvas(self.top,bg = "#ffffff",height = 350,width = 450,bd = 0,highlightthickness = 0,relief = "ridge")
 		self.canvas.place(x = 0, y = 0)
 
 		self.background_img01 = PhotoImage(file = f"images/background.png")
@@ -245,21 +247,46 @@ class Interfaz:
 				self.top.title("Editar")
 				self.img21 = PhotoImage(file = f"images/r3.png")
 				self.b_actualizar = Button(self.top,image = self.img21,borderwidth = 0,highlightthickness = 0,relief = "flat",bg="#E5E4E4",
-					activebackground="#E5E4E4", cursor="hand2")
+					activebackground="#E5E4E4", cursor="hand2", command=self.actualizar)
 				self.b_actualizar.place(x = 155, y = 297,width = 140,height = 28)
 
+				seleccion = self.tabla.focus()
+				values = self.tabla.item(seleccion,"values")
+
+				if values =="":
+					self.top.destroy()
+					messagebox.showinfo("Error","No ha seleccionado un registro")
+				else:
+					self._valor_id=values[0]
+					self.registrar_nombre.insert(END,values[1])
+					self.registrar_telefono.insert(END,values[2])
+					self.registrar_sucursal.insert(END,values[3])
+					self.registrar_fecha.insert(END,values[4])
+					self.registrar_supervisor.insert(END,values[5])
+					self.registrar_gerente.insert(END,values[6])
+
 #Funciones
-	def leer_info(self):
+	def buscar(self, event):
+		objeto=info()
+		self.tabla.delete(*self.tabla.get_children())
+		data = objeto.buscar(self.buscador.get())
+
+		if len(data) !=0:
+			for i in data:
+				self.tabla.insert(parent="",index="end", text="", values=(i[0],i[1],
+					i[2],i[3],i[4],i[5],i[6]))
+
+	def leer_info(self):  #Leer la base de datos y actualizar el treeview
 		self.tabla.delete(*self.tabla.get_children())
 		objeto=info()
 		data = objeto.orden_nombres()
 
 		if len(data) !=0:
 			for i in data:
-				self.tabla.insert(parent="",index="end", text="", values=(i[1],
+				self.tabla.insert(parent="",index="end", text="", values=(i[0],i[1],
 					i[2],i[3],i[4],i[5],i[6]))
 
-	def registrar(self, event):
+	def registrar(self, event): #Realiza el registro hacia la base de datos
 		if self.registrar_nombre.get() != "" and self.registrar_telefono.get() !="" and self.registrar_sucursal != "" and self.registrar_fecha.get() != "" and self.registrar_supervisor.get() != "" and self.registrar_gerente.get() != 0:
 			objeto=info()
 			compromar_001 = objeto.checar_nombre(self.registrar_nombre.get())
@@ -273,18 +300,18 @@ class Interfaz:
 				self.registrar_nombre.delete(0, END); self.registrar_telefono.delete(0, END)
 				self.registrar_sucursal.delete(0, END); self.registrar_fecha.delete(0, END)
 				self.registrar_supervisor.delete(0, END); self.registrar_gerente.delete(0, END)
-				messagebox.showinfo("Completado","Actualizacion de datos  completada.")
+				messagebox.showinfo("Completado","Registro de datos completado.")
 				self.leer_info()
 		else:
 			messagebox.showinfo("Error","Debe llenar todos los apartados.")
 
 		match event.widget:
-			case self.b_r001:
+			case self.b_r001: #En el caso de que solo quiera registrar y cerrar
 				self.top.destroy()
-			case self.b_r002:
+			case self.b_r002: #En el caso de que quiera continuar registrando
 				pass
 
-	def eliminar_registro(self):
+	def eliminar_registro(self): #Elimina registro
 		seleccion = self.tabla.focus()
 		values = self.tabla.item(seleccion,"values")
 
@@ -299,6 +326,25 @@ class Interfaz:
 				messagebox.showinfo("Completado","Registro eliminado.")
 				self.leer_info()
 
+	def actualizar(self): #Realiza la actualizacion de datos
+		if self.registrar_nombre.get() != "" and self.registrar_telefono.get() !="" and self.registrar_sucursal != "" and self.registrar_fecha.get() != "" and self.registrar_supervisor.get() != "" and self.registrar_gerente.get() != 0:
+			objeto=info()
+			compromar_001 = objeto.checar_nombre(self.registrar_nombre.get())
+			if compromar_001:
+				messagebox.showinfo("Error","El empleado ya esta registrado en la base de datos.")
+			else:
+				objeto.actualizar(self._valor_id,self.registrar_nombre.get(),self.registrar_telefono.get(),
+					self.registrar_sucursal.get(),self.registrar_fecha.get(),
+					self.registrar_supervisor.get(),self.registrar_gerente.get())
+
+				self.registrar_nombre.delete(0, END); self.registrar_telefono.delete(0, END)
+				self.registrar_sucursal.delete(0, END); self.registrar_fecha.delete(0, END)
+				self.registrar_supervisor.delete(0, END); self.registrar_gerente.delete(0, END)
+				self.top.destroy()
+				messagebox.showinfo("Completado","Actualizacion de datos completada.")
+				self.leer_info()
+		else:
+			messagebox.showinfo("Error","Debe llenar todos los apartados.")
 
 if __name__ == "__main__":
 	window=ThemedTk(theme="adapta")
