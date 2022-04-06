@@ -8,6 +8,10 @@ class info():
 	def orden_nombres(self):
 		info=self.db.cursor.execute(f"SELECT * FROM Direcciones").fetchall()
 		info.sort(key = lambda x: x[1])
+		"""info=[]
+		for i in range(50):
+			valor=(i,"Alan","8111901788","guadalupe","12/23/23","roberto","victor")
+			info.append(valor)"""
 		return info
 
 	def buscar(self, valor_busqueda):

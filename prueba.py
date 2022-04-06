@@ -1,28 +1,29 @@
-lista = [(1,"Alan","epa","ke onda"),(2,"ana","no ma","chingas")]
-valor_busqueda = "a"
+from tkinter import *
 
-for i in lista:
-    for a in i:
-        b=str(a)
-        #objeto = b.find(valor_busqueda)
-        objeto=b[:len(valor_busqueda)].find(valor_busqueda)
-        if objeto != -1:
-            print(i)
+root = Tk()
 
-"""for i in lista: #la tupla
-    for a in i: #la cadena
-        b=str(a) #cadena en str
-        if incremento != longitud:
-            valor2+=b
-            print(valor2)
-            incremento+=1
-        incremento=0
-        print("VALOR 1: ",valor_busqueda.lower()); print("VALOR 2: ",valor2.lower())
-        if valor_busqueda.lower() == valor2.lower():
-            print("encontrado",i)
-            print("encontrado",b.lower())
-            print("-----------------------------------------------------------------------")
-        valor2="""
+red = Entry(root,bg="red")
+red.grid(row=0,column=0,padx=10,pady=10)
+white = Entry(root,bg="white")
+white.grid(row=1,column=0,padx=10,pady=10)
+blue = Entry(root, bg="blue")
+blue.grid(row=2,column=0,padx=10,pady=10)
+
+def btn_clicked():
+    top=Toplevel(root)
+    red1 = Entry(top,bg="red")
+    red1.grid(row=0,column=0,padx=10,pady=10)
+    red1.focus()
+    white1 = Entry(top,bg="white")
+    white1.grid(row=1,column=0,padx=10,pady=10)
+    blue2 = Entry(top, bg="blue")
+    blue2.grid(row=2,column=0,padx=10,pady=10)
+
+boton = Button(root,text="Entrar",command=btn_clicked)
+boton.grid(row=3,column=0,padx=10,pady=10)
+
+
+root.mainloop()
 
 
 

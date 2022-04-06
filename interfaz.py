@@ -71,11 +71,11 @@ class Interfaz:
 		canvas = Canvas(self.mainFrame)
 		canvas.pack(side=LEFT,fill=BOTH, expand=1)
 
-		scrollbar = ttk.Scrollbar(self.mainFrame, orient=VERTICAL, command=canvas.yview)
+		"""scrollbar = ttk.Scrollbar(self.mainFrame, orient=VERTICAL, command=canvas.yview)
 		scrollbar.pack(side=RIGHT, fill=Y)
 
 		canvas.configure(yscrollcommand=scrollbar.set)
-		canvas.bind("<Configure>", lambda e: canvas.configure(scrollregion = canvas.bbox("all")))
+		canvas.bind("<Configure>", lambda e: canvas.configure(scrollregion = canvas.bbox("all")))"""
 
 		secondFrame = ttk.Frame(canvas)
 		canvas.create_window((0,0), window=secondFrame, anchor="nw")
@@ -129,7 +129,7 @@ class Interfaz:
 		style.configure("Treeview")
 		style.map("Treeview", background=[("selected","#38022D")])
 
-		self.tabla = ttk.Treeview(secondFrame)
+		self.tabla = ttk.Treeview(secondFrame, height=20)
 		self.tabla["columns"] = ("ID","Nombre de empleado","Teléfono","Sucursal","Fecha de ingreso","Supervisor","Gerente")
 		self.tabla.column("#0",width=0,stretch=NO)
 		self.tabla.column("ID",anchor=CENTER,width=50)
@@ -150,6 +150,10 @@ class Interfaz:
 		self.tabla.heading("Gerente",text="Gerente",anchor=CENTER)
 
 		self.tabla.grid(row=2,column=3,rowspan=self.h, columnspan=self.w,sticky="nw",padx=10)
+
+		self.scrollvert=Scrollbar(secondFrame,command=self.tabla.yview)
+		self.scrollvert.place(in_=self.tabla,relx=1, relheight=1, bordermode="outside")
+		self.tabla.config(yscrollcommand=self.scrollvert.set)
 
 		self.leer_info()
 
@@ -190,6 +194,7 @@ class Interfaz:
 
 	#Pantalla TopLevel Registro	
 	def pantalla_registro(self, event):
+		self.boton_registrar_001.focus()
 		self.top=Toplevel()
 		self.top.grab_set()
 		self.top.transient(master=None)
@@ -207,30 +212,39 @@ class Interfaz:
 		entry4_bg = self.canvas.create_image(294.5, 34.5,image = self.entry0_img)
 		self.registrar_nombre = Entry(self.top,bd = 0,bg = "#ffffff",highlightthickness = 0)
 		self.registrar_nombre.place(x = 189.0, y = 24,width = 211.0,height = 23)
+		self.registrar_nombre.bind("<Key>",self.mover)
+		self.registrar_nombre.focus()
 
 		entry5_bg = self.canvas.create_image(294.5, 74.5,image = self.entry0_img)
 		self.registrar_telefono = Entry(self.top,bd = 0,bg = "#ffffff",highlightthickness = 0)
 		self.registrar_telefono.place(x = 189.0, y = 64,width = 211.0,height = 23)
+		self.registrar_telefono.bind("<Key>",self.mover)
 
 		entry3_bg = self.canvas.create_image(294.5, 114.5,image = self.entry0_img)
 		self.registrar_sucursal = Entry(self.top,bd = 0,bg = "#ffffff",highlightthickness = 0)
 		self.registrar_sucursal.place(x = 189.0, y = 104,width = 211.0,height = 23)
+		self.registrar_sucursal.bind("<Key>",self.mover)
 
 		entry0_bg = self.canvas.create_image(294.5, 154.5,image = self.entry0_img)
 		self.registrar_fecha = Entry(self.top,bd = 0,bg = "#ffffff",highlightthickness = 0)
 		self.registrar_fecha.place(x = 189.0, y = 144,width = 211.0,height = 23)
+		self.registrar_fecha.bind("<Key>",self.mover)
 
 		entry1_bg = self.canvas.create_image(294.5, 194.5,image = self.entry0_img)
 		self.registrar_supervisor = Entry(self.top,bd = 0,bg = "#ffffff",highlightthickness = 0)
 		self.registrar_supervisor.place(x = 189.0, y = 184,width = 211.0,height = 23)
+		self.registrar_supervisor.bind("<Key>",self.mover)
 
 		entry2_bg = self.canvas.create_image(294.5, 236.5,image = self.entry0_img)
 		self.registrar_gerente = Entry(self.top,bd = 0,bg = "#ffffff",highlightthickness = 0)
 		self.registrar_gerente.place(x = 189.0, y = 224,width = 211.0,height = 23)
+		self.registrar_gerente.bind("<Key>",self.mover)
 
 		match event.widget:
 			case self.boton_registrar_001:
 				self.top.title("Registrar")
+				self.top.bind("<Return>",self.registrar)
+
 				self.img01 = PhotoImage(file = f"images/r1.png")
 				self.b_r001 = Button(self.top,image = self.img01,borderwidth = 0,highlightthickness = 0,relief = "flat",bg="#E5E4E4",
 				    activebackground="#E5E4E4", cursor="hand2")
@@ -266,6 +280,25 @@ class Interfaz:
 					self.registrar_gerente.insert(END,values[6])
 
 #Funciones
+	def mover(self, event):
+		widgets=[self.registrar_nombre,self.registrar_telefono,self.registrar_sucursal,
+		self.registrar_fecha,self.registrar_supervisor, self.registrar_gerente]
+		if event.keysym == "Down":
+			try:
+				x=widgets.index(event.widget)
+				c=widgets[x+1]
+				c.focus()
+			except IndexError:
+				pass
+		elif event.keysym == "Up":
+			try:
+				x=widgets.index(event.widget)
+				c=widgets[x-1]
+				c.focus()
+			except IndexError:
+				pass
+
+
 	def buscar(self, event):
 		objeto=info()
 		self.tabla.delete(*self.tabla.get_children())
@@ -287,10 +320,11 @@ class Interfaz:
 					i[2],i[3],i[4],i[5],i[6]))
 
 	def registrar(self, event): #Realiza el registro hacia la base de datos
-		if self.registrar_nombre.get() != "" and self.registrar_telefono.get() !="" and self.registrar_sucursal != "" and self.registrar_fecha.get() != "" and self.registrar_supervisor.get() != "" and self.registrar_gerente.get() != 0:
+		if self.registrar_nombre.get() != "" and self.registrar_telefono.get() !="" and self.registrar_sucursal != "" and self.registrar_fecha.get() != "" and self.registrar_supervisor.get() != "" and self.registrar_gerente.get() != "":
 			objeto=info()
 			compromar_001 = objeto.checar_nombre(self.registrar_nombre.get())
-			if compromar_001:
+			print(event.widget)
+			if compromar_001 and event.widget != self.b_actualizar:
 				messagebox.showinfo("Error","El empleado ya esta registrado en la base de datos.")
 			else:
 				objeto.agregar_elementos(self.registrar_nombre.get(),self.registrar_telefono.get(),
