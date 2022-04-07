@@ -1,4 +1,6 @@
 from Conexion import Conexion
+import pandas as pd
+from tkinter import filedialog, messagebox
 
 class info():
 	def __init__(self):
@@ -58,6 +60,27 @@ class info():
 			for i in info:
 				if nombre == i[1]:
 					return f"Si esta"
+
+	def exportar_archivo(self):
+		data_null={}
+		df_null = pd.DataFrame(data_null)
+		a = filedialog.asksaveasfilename(title="Abrir", initialdir = "C:/",filetypes = [("Archivo excel","*.xlsx")])
+
+		if a != "":
+			df_vacio = pd.DataFrame(columns=["Id","Nombre","Teléfono","Sucursal","Fecha de ingreso","Supervisor","Gerente"])
+			valores_to_excel2=self.db.cursor.execute(f"SELECT * FROM Direcciones").fetchall()
+			for i in valores_to_excel2:
+				df_vacio = df_vacio.append({"Id": i[0],
+								"Nombre": i[1],
+								"Teléfono":i[2],
+								"Sucursal":i[3],
+								"Fecha de ingreso":i[4],
+								"Supervisor":i[5],
+								"Gerente":i[6]}, ignore_index=True)
+
+			df_vacio.to_excel(f"{a}.xlsx",index=False)
+
+			messagebox.showinfo("Completado","Excel creado.")
 
 if __name__ == "__main__":
 	objeto=info()

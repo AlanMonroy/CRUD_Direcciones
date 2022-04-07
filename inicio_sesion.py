@@ -88,22 +88,6 @@ class Login:
         elif event.widget == self.passwordIn:
             self.text2.set("")
 
-    """def key(self, event):
-        if event.char == "\r":
-            if self.nombreIn.get().strip() != "" and self.passwordIn.get() != "":
-                if self.user == self.nombreIn.get().strip() and self.passw == self.passwordIn.get():
-                    messagebox.showinfo("Bienvenida", f"Bienvenido {self.nombreIn.get()}")
-                    self.window.destroy()
-                    window = Tk()
-                    regProd = RegistrarProducto(window, "Registrar usuario", 650, 500)
-                    window.mainloop()
-                else:
-                    messagebox.showinfo("Error", "Usuario o contraseña incorrectos.")
-            else:
-                messagebox.showinfo("Error", f"Se deben llenar todos los campos")
-        else:
-            pass"""
-
     def focus(self, event):
         if event.widget == self.b0:
             self.passwordIn.configure(state = "active")

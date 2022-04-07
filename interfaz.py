@@ -39,7 +39,7 @@ class Interfaz:
 		if self.conteo_menu %2 == 0:
 			self.desplegable.destroy()
 		else:
-			self.desplegable=Frame(self.window, bg="black")
+			self.desplegable=Frame(self.window, bg="white")
 			self.desplegable.place(x=0,y=69)
 
 			canvas = Canvas(self.desplegable)
@@ -49,18 +49,17 @@ class Interfaz:
 			tercerFrame = Frame(canvas, bg="black", width=250)
 			tercerFrame.grid(row=0,column=0, sticky="e")
 
-			#ttk.Style().configure("TButton", padding=6, relief="flat",background="black")
-			self.boton_desplegable1 = ttk.Button(canvas, text=f"No disponible")
-			self.boton_desplegable1.grid(row=1,column=0, padx=10, pady=10)
+			boton_desplegable1 = ttk.Button(canvas, text=f"No disponible")
+			boton_desplegable1.grid(row=1,column=0, padx=50, pady=10)
 			#self.boton_desplegable1.bind("<Button-1>", self.ir_pantalla)
 
-			self.boton_desplegable2 = ttk.Button(canvas, text=f"No disponible")
-			self.boton_desplegable2.grid(row=2,column=0, padx=10, pady=10)
+			boton_desplegable2 = ttk.Button(canvas, text=f"No disponible")
+			boton_desplegable2.grid(row=2,column=0, padx=50, pady=10)
 			#self.boton_desplegable2.bind("<Button-1>", self.ir_pantalla)
 
-			self.boton_desplegable3 = ttk.Button(canvas, text=f"No disponible")
-			self.boton_desplegable3.grid(row=3,column=0, padx=10, pady=10)
-			self.boton_desplegable3.bind("<Button-1>", self.ir_pantalla)
+			boton_desplegable3 = ttk.Button(canvas, text=f"No disponible")
+			boton_desplegable3.grid(row=3,column=0, padx=50, pady=10)
+			boton_desplegable3.bind("<Button-1>", self.ir_pantalla)
 
 	#Pantalla MENU
 	def menu(self):
@@ -123,6 +122,9 @@ class Interfaz:
 			image = self.img_ButtonEliminarRegistro, command=self.eliminar_registro, curso= "hand2",
 			borderwidth = 0, highlightthickness = 0, relief = "flat", bg="white", activebackground="white")
 		self.ButtonEliminarRegistro.grid(row=3,column=1, padx=10, pady=10)
+
+		self.boton_exportar = ttk.Button(secondFrame, text=f"Exportar a Excel",command=self.exportar0)
+		self.boton_exportar.grid(row=4,column=1, padx=10, pady=10)
 
 		#--------------------------------------Tabla------------------------------------------------------------#
 		style = ttk.Style()
@@ -259,6 +261,8 @@ class Interfaz:
 
 			case self.ButtonEditar:
 				self.top.title("Editar")
+				self.top.bind("<Return>",self.actualizar)
+
 				self.img21 = PhotoImage(file = f"images/r3.png")
 				self.b_actualizar = Button(self.top,image = self.img21,borderwidth = 0,highlightthickness = 0,relief = "flat",bg="#E5E4E4",
 					activebackground="#E5E4E4", cursor="hand2", command=self.actualizar)
@@ -280,6 +284,10 @@ class Interfaz:
 					self.registrar_gerente.insert(END,values[6])
 
 #Funciones
+	def exportar0(self):
+		objeto=info()
+		objeto.exportar_archivo()
+
 	def mover(self, event):
 		widgets=[self.registrar_nombre,self.registrar_telefono,self.registrar_sucursal,
 		self.registrar_fecha,self.registrar_supervisor, self.registrar_gerente]
@@ -323,8 +331,7 @@ class Interfaz:
 		if self.registrar_nombre.get() != "" and self.registrar_telefono.get() !="" and self.registrar_sucursal != "" and self.registrar_fecha.get() != "" and self.registrar_supervisor.get() != "" and self.registrar_gerente.get() != "":
 			objeto=info()
 			compromar_001 = objeto.checar_nombre(self.registrar_nombre.get())
-			print(event.widget)
-			if compromar_001 and event.widget != self.b_actualizar:
+			if compromar_001:
 				messagebox.showinfo("Error","El empleado ya esta registrado en la base de datos.")
 			else:
 				objeto.agregar_elementos(self.registrar_nombre.get(),self.registrar_telefono.get(),
@@ -360,11 +367,13 @@ class Interfaz:
 				messagebox.showinfo("Completado","Registro eliminado.")
 				self.leer_info()
 
-	def actualizar(self): #Realiza la actualizacion de datos
+	def actualizar(self, event=0): #Realiza la actualizacion de datos
+		seleccion = self.tabla.focus()
+		values = self.tabla.item(seleccion,"values")
 		if self.registrar_nombre.get() != "" and self.registrar_telefono.get() !="" and self.registrar_sucursal != "" and self.registrar_fecha.get() != "" and self.registrar_supervisor.get() != "" and self.registrar_gerente.get() != 0:
 			objeto=info()
 			compromar_001 = objeto.checar_nombre(self.registrar_nombre.get())
-			if compromar_001:
+			if values[1] != self.registrar_nombre.get() and compromar_001:
 				messagebox.showinfo("Error","El empleado ya esta registrado en la base de datos.")
 			else:
 				objeto.actualizar(self._valor_id,self.registrar_nombre.get(),self.registrar_telefono.get(),
