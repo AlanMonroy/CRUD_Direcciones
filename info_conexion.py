@@ -25,13 +25,27 @@ class info():
 			return info
 
 		for i in info:
-		    for a in i:
-		        b=str(a)
-		        c=b.lower()
-		        objeto=c[:len(valor_busqueda1)].find(valor_busqueda1)
-		        if objeto != -1:
-		            info1.append(i)
-		            break
+			cadena_nombre = i[1].split(" ")
+			cadena_supervisor = i[5].split(" ")
+			cadena_gerente = i[6].split(" ")
+			lista = [cadena_nombre,cadena_supervisor,cadena_gerente]
+
+			for a in i:
+				b=str(a)
+				c=b.lower()
+				objeto=c[:len(valor_busqueda1)].find(valor_busqueda1)
+				if objeto != -1:
+					info1.append(i)
+					break
+					
+			for leer_cadena in lista:
+				for a1 in leer_cadena:
+					b1=str(a1)
+					c1=b1.lower()
+					objeto1=c1[:len(valor_busqueda1)].find(valor_busqueda1)
+					if objeto1 != -1 and i not in info1:
+						info1.append(i)
+						break
 		
 		return info1
 
@@ -86,4 +100,4 @@ if __name__ == "__main__":
 	objeto=info()
 	obj = objeto.orden_nombres()
 	#print(objeto.checar_nombre("Alan"))
-	objeto.buscar("a")
+	objeto.buscar("ro")
