@@ -88,7 +88,7 @@ class info():
 		info=self.db.cursor.execute(f"SELECT * FROM Direcciones").fetchall()
 		identificador1 = int(identificador)
 
-		diccionario = {}
+		diccionario = dict()
 		for i in info:
 			if i[0] != identificador1:
 				diccionario[f"{i[0]}"] = {"id":i[0],

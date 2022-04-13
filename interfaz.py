@@ -300,11 +300,11 @@ class Interfaz:
 					self.registrar_gerente.insert(END,values[8])
 
 #Funciones
-	def exportar0(self):
+	def exportar0(self):  #Manda llamar la funcion exportar a excel
 		objeto=info()
 		objeto.exportar_archivo()
 
-	def mover(self, event):
+	def mover(self, event):  #Funcion grafica para moverte con las flechas del teclado
 		widgets=[self.registrar_numero,self.registrar_nombre,self.registrar_telefono,self.registrar_zona,self.registrar_sucursal,
 		self.registrar_fecha,self.registrar_supervisor, self.registrar_gerente]
 		if event.keysym == "Down":
@@ -323,7 +323,7 @@ class Interfaz:
 				pass
 
 
-	def buscar(self, event):
+	def buscar(self, event): #Buscador de elementos en la DB
 		objeto=info()
 		self.tabla.delete(*self.tabla.get_children())
 		data = objeto.buscar(self.buscador.get())
@@ -390,9 +390,7 @@ class Interfaz:
 		if self.registrar_nombre.get() != "" and self.registrar_telefono.get() !="" and self.registrar_sucursal != "" and self.registrar_fecha.get() != "" and self.registrar_supervisor.get() != "" and self.registrar_gerente.get() != "" and self.registrar_numero.get() != "" and self.registrar_zona.get() != "":
 			objeto=info()
 			compromar_001 = objeto.checar_actualizacion(self._valor_id,self.registrar_numero.get(),self.registrar_nombre.get())
-			#values[1] != self.registrar_numero.get()
-			#if values[2] != self.registrar_nombre.get() or values[1] != self.registrar_numero.get():
-			print(compromar_001)
+
 			if compromar_001:
 				messagebox.showinfo("Error","El empleado ya esta registrado en la base de datos.")
 			else:
