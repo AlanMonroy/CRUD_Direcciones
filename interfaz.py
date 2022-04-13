@@ -132,20 +132,24 @@ class Interfaz:
 		style.map("Treeview", background=[("selected","#38022D")])
 
 		self.tabla = ttk.Treeview(secondFrame, height=20)
-		self.tabla["columns"] = ("ID","Nombre de empleado","Teléfono","Sucursal","Fecha de ingreso","Supervisor","Gerente")
+		self.tabla["columns"] = ("ID","No. Empleado","Nombre de empleado","Teléfono","Zona","Sucursal","Fecha de ingreso","Supervisor","Gerente")
 		self.tabla.column("#0",width=0,stretch=NO)
-		self.tabla.column("ID",anchor=CENTER,width=50)
+		self.tabla.column("ID",anchor=CENTER,width=30)
+		self.tabla.column("No. Empleado",anchor=CENTER,width=80)
 		self.tabla.column("Nombre de empleado",anchor=CENTER,width=200)
 		self.tabla.column("Teléfono",anchor=CENTER,width=100)
-		self.tabla.column("Sucursal",anchor=CENTER,width=200)
-		self.tabla.column("Fecha de ingreso",anchor=CENTER,width=200)
-		self.tabla.column("Supervisor",anchor=CENTER,width=200)
-		self.tabla.column("Gerente",anchor=CENTER,width=200)
+		self.tabla.column("Zona",anchor=CENTER,width=100)
+		self.tabla.column("Sucursal",anchor=CENTER,width=120)
+		self.tabla.column("Fecha de ingreso",anchor=CENTER,width=100)
+		self.tabla.column("Supervisor",anchor=CENTER,width=210)
+		self.tabla.column("Gerente",anchor=CENTER,width=210)
 
 		self.tabla.heading("#0",text="",anchor=CENTER)
 		self.tabla.heading("ID",text="ID",anchor=CENTER)
+		self.tabla.heading("No. Empleado",text="No. Empleado",anchor=CENTER)
 		self.tabla.heading("Nombre de empleado",text="Nombre de empleado",anchor=CENTER)
 		self.tabla.heading("Teléfono",text="Teléfono",anchor=CENTER)
+		self.tabla.heading("Zona",text="Zona",anchor=CENTER)
 		self.tabla.heading("Sucursal",text="Sucursal",anchor=CENTER)
 		self.tabla.heading("Fecha de ingreso",text="Fecha de ingreso",anchor=CENTER)
 		self.tabla.heading("Supervisor",text="Supervisor",anchor=CENTER)
@@ -201,45 +205,55 @@ class Interfaz:
 		self.top.grab_set()
 		self.top.transient(master=None)
 		self.top.resizable(False, True)
-		self.top.geometry("450x350")
+		self.top.geometry("450x400")
 		self.top.configure(bg = "#ffffff")
-		self.canvas = Canvas(self.top,bg = "#ffffff",height = 350,width = 450,bd = 0,highlightthickness = 0,relief = "ridge")
+		self.canvas = Canvas(self.top,bg = "#ffffff",height = 400,width = 450,bd = 0,highlightthickness = 0,relief = "ridge")
 		self.canvas.place(x = 0, y = 0)
 
 		self.background_img01 = PhotoImage(file = f"images/background.png")
-		background = self.canvas.create_image(225.0, 175.0,image=self.background_img01)
+		background = self.canvas.create_image(225.0, 200.0,image=self.background_img01)
 
 		self.entry0_img = PhotoImage(file = f"images/img_textBox1.png")
 
-		entry4_bg = self.canvas.create_image(294.5, 34.5,image = self.entry0_img)
-		self.registrar_nombre = Entry(self.top,bd = 0,bg = "#ffffff",highlightthickness = 0)
-		self.registrar_nombre.place(x = 189.0, y = 24,width = 211.0,height = 23)
-		self.registrar_nombre.bind("<Key>",self.mover)
-		self.registrar_nombre.focus()
+		entry0_bg = self.canvas.create_image(294.5, 34.5,image = self.entry0_img)
+		self.registrar_numero = Entry(self.top,bd = 0,bg = "#ffffff",highlightthickness = 0)
+		self.registrar_numero.place(x = 189.0, y = 24,width = 211.0,height = 23)
+		self.registrar_numero.bind("<Key>",self.mover)
+		self.registrar_numero.focus()
 
-		entry5_bg = self.canvas.create_image(294.5, 74.5,image = self.entry0_img)
+		entry1_bg = self.canvas.create_image(294.5, 74.5,image = self.entry0_img)
+		self.registrar_nombre = Entry(self.top,bd = 0,bg = "#ffffff",highlightthickness = 0)
+		self.registrar_nombre.place(x = 189.0, y = 64,width = 211.0,height = 23)
+		self.registrar_nombre.bind("<Key>",self.mover)
+
+		entry2_bg = self.canvas.create_image(294.5, 114.5,image = self.entry0_img)
 		self.registrar_telefono = Entry(self.top,bd = 0,bg = "#ffffff",highlightthickness = 0)
-		self.registrar_telefono.place(x = 189.0, y = 64,width = 211.0,height = 23)
+		self.registrar_telefono.place(x = 189.0, y = 104,width = 211.0,height = 23)
 		self.registrar_telefono.bind("<Key>",self.mover)
 
-		entry3_bg = self.canvas.create_image(294.5, 114.5,image = self.entry0_img)
+		entry3_bg = self.canvas.create_image(294.5, 154.5,image = self.entry0_img)
+		self.registrar_zona = Entry(self.top,bd = 0,bg = "#ffffff",highlightthickness = 0)
+		self.registrar_zona.place(x = 189.0, y = 144,width = 211.0,height = 23)
+		self.registrar_zona.bind("<Key>",self.mover)
+
+		entry4_bg = self.canvas.create_image(294.5, 194.5,image = self.entry0_img)
 		self.registrar_sucursal = Entry(self.top,bd = 0,bg = "#ffffff",highlightthickness = 0)
-		self.registrar_sucursal.place(x = 189.0, y = 104,width = 211.0,height = 23)
+		self.registrar_sucursal.place(x = 189.0, y = 184,width = 211.0,height = 23)
 		self.registrar_sucursal.bind("<Key>",self.mover)
 
-		entry0_bg = self.canvas.create_image(294.5, 154.5,image = self.entry0_img)
+		entry5_bg = self.canvas.create_image(294.5, 234.5,image = self.entry0_img)
 		self.registrar_fecha = Entry(self.top,bd = 0,bg = "#ffffff",highlightthickness = 0)
-		self.registrar_fecha.place(x = 189.0, y = 144,width = 211.0,height = 23)
+		self.registrar_fecha.place(x = 189.0, y = 224,width = 211.0,height = 23)
 		self.registrar_fecha.bind("<Key>",self.mover)
 
-		entry1_bg = self.canvas.create_image(294.5, 194.5,image = self.entry0_img)
+		entry6_bg = self.canvas.create_image(294.5, 274.5,image = self.entry0_img)
 		self.registrar_supervisor = Entry(self.top,bd = 0,bg = "#ffffff",highlightthickness = 0)
-		self.registrar_supervisor.place(x = 189.0, y = 184,width = 211.0,height = 23)
+		self.registrar_supervisor.place(x = 189.0, y = 264,width = 211.0,height = 23)
 		self.registrar_supervisor.bind("<Key>",self.mover)
 
-		entry2_bg = self.canvas.create_image(294.5, 236.5,image = self.entry0_img)
+		entry7_bg = self.canvas.create_image(294.5, 314.5,image = self.entry0_img)
 		self.registrar_gerente = Entry(self.top,bd = 0,bg = "#ffffff",highlightthickness = 0)
-		self.registrar_gerente.place(x = 189.0, y = 224,width = 211.0,height = 23)
+		self.registrar_gerente.place(x = 189.0, y = 304,width = 211.0,height = 23)
 		self.registrar_gerente.bind("<Key>",self.mover)
 
 		match event.widget:
@@ -250,13 +264,13 @@ class Interfaz:
 				self.img01 = PhotoImage(file = f"images/r1.png")
 				self.b_r001 = Button(self.top,image = self.img01,borderwidth = 0,highlightthickness = 0,relief = "flat",bg="#E5E4E4",
 				    activebackground="#E5E4E4", cursor="hand2")
-				self.b_r001.place(x = 50, y = 297,width = 140,height = 28)
+				self.b_r001.place(x = 50, y = 348,width = 140,height = 28)
 				self.b_r001.bind("<Button-1>", self.registrar)
 
 				self.img11 = PhotoImage(file = f"images/r2.png")
 				self.b_r002 = Button(self.top,image = self.img11,borderwidth = 0,highlightthickness = 0,relief = "flat",bg="#E5E4E4",
 				    activebackground="#E5E4E4", cursor="hand2")
-				self.b_r002.place(x = 260, y = 297,width = 140,height = 28)
+				self.b_r002.place(x = 260, y = 348,width = 140,height = 28)
 				self.b_r002.bind("<Button-1>", self.registrar)
 
 			case self.ButtonEditar:
@@ -266,7 +280,7 @@ class Interfaz:
 				self.img21 = PhotoImage(file = f"images/r3.png")
 				self.b_actualizar = Button(self.top,image = self.img21,borderwidth = 0,highlightthickness = 0,relief = "flat",bg="#E5E4E4",
 					activebackground="#E5E4E4", cursor="hand2", command=self.actualizar)
-				self.b_actualizar.place(x = 155, y = 297,width = 140,height = 28)
+				self.b_actualizar.place(x = 155, y = 348,width = 140,height = 28)
 
 				seleccion = self.tabla.focus()
 				values = self.tabla.item(seleccion,"values")
@@ -276,12 +290,14 @@ class Interfaz:
 					messagebox.showinfo("Error","No ha seleccionado un registro")
 				else:
 					self._valor_id=values[0]
-					self.registrar_nombre.insert(END,values[1])
-					self.registrar_telefono.insert(END,values[2])
-					self.registrar_sucursal.insert(END,values[3])
-					self.registrar_fecha.insert(END,values[4])
-					self.registrar_supervisor.insert(END,values[5])
-					self.registrar_gerente.insert(END,values[6])
+					self.registrar_numero.insert(END,values[1])
+					self.registrar_nombre.insert(END,values[2])
+					self.registrar_telefono.insert(END,values[3])
+					self.registrar_zona.insert(END,values[4])
+					self.registrar_sucursal.insert(END,values[5])
+					self.registrar_fecha.insert(END,values[6])
+					self.registrar_supervisor.insert(END,values[7])
+					self.registrar_gerente.insert(END,values[8])
 
 #Funciones
 	def exportar0(self):
@@ -289,7 +305,7 @@ class Interfaz:
 		objeto.exportar_archivo()
 
 	def mover(self, event):
-		widgets=[self.registrar_nombre,self.registrar_telefono,self.registrar_sucursal,
+		widgets=[self.registrar_numero,self.registrar_nombre,self.registrar_telefono,self.registrar_zona,self.registrar_sucursal,
 		self.registrar_fecha,self.registrar_supervisor, self.registrar_gerente]
 		if event.keysym == "Down":
 			try:
@@ -315,7 +331,7 @@ class Interfaz:
 		if len(data) !=0:
 			for i in data:
 				self.tabla.insert(parent="",index="end", text="", values=(i[0],i[1],
-					i[2],i[3],i[4],i[5],i[6]))
+					i[2],i[3],i[4],i[5],i[6],i[7],i[8]))
 
 	def leer_info(self):  #Leer la base de datos y actualizar el treeview
 		self.tabla.delete(*self.tabla.get_children())
@@ -325,22 +341,23 @@ class Interfaz:
 		if len(data) !=0:
 			for i in data:
 				self.tabla.insert(parent="",index="end", text="", values=(i[0],i[1],
-					i[2],i[3],i[4],i[5],i[6]))
+					i[2],i[3],i[4],i[5],i[6],i[7],i[8]))
 
 	def registrar(self, event): #Realiza el registro hacia la base de datos
-		if self.registrar_nombre.get() != "" and self.registrar_telefono.get() !="" and self.registrar_sucursal != "" and self.registrar_fecha.get() != "" and self.registrar_supervisor.get() != "" and self.registrar_gerente.get() != "":
+		if self.registrar_nombre.get() != "" and self.registrar_telefono.get() !="" and self.registrar_sucursal != "" and self.registrar_fecha.get() != "" and self.registrar_supervisor.get() != "" and self.registrar_gerente.get() != "" and self.registrar_numero.get() != "" and self.registrar_zona.get() != "":
 			objeto=info()
-			compromar_001 = objeto.checar_nombre(self.registrar_nombre.get())
+			compromar_001 = objeto.checar_nombre(self.registrar_numero.get(),self.registrar_nombre.get())
 			if compromar_001:
 				messagebox.showinfo("Error","El empleado ya esta registrado en la base de datos.")
 			else:
-				objeto.agregar_elementos(self.registrar_nombre.get(),self.registrar_telefono.get(),
-					self.registrar_sucursal.get(),self.registrar_fecha.get(),
+				objeto.agregar_elementos(self.registrar_numero.get(),self.registrar_nombre.get(),self.registrar_telefono.get(),
+					self.registrar_zona.get(),self.registrar_sucursal.get(),self.registrar_fecha.get(),
 					self.registrar_supervisor.get(),self.registrar_gerente.get())
 
 				self.registrar_nombre.delete(0, END); self.registrar_telefono.delete(0, END)
 				self.registrar_sucursal.delete(0, END); self.registrar_fecha.delete(0, END)
 				self.registrar_supervisor.delete(0, END); self.registrar_gerente.delete(0, END)
+				self.registrar_numero.delete(0,END); self.registrar_zona.delete(0,END)
 				messagebox.showinfo("Completado","Registro de datos completado.")
 				self.leer_info()
 		else:
@@ -366,23 +383,27 @@ class Interfaz:
 				objeto.eliminar(valor_eliminar)
 				messagebox.showinfo("Completado","Registro eliminado.")
 				self.leer_info()
-
+				
 	def actualizar(self, event=0): #Realiza la actualizacion de datos
 		seleccion = self.tabla.focus()
 		values = self.tabla.item(seleccion,"values")
-		if self.registrar_nombre.get() != "" and self.registrar_telefono.get() !="" and self.registrar_sucursal != "" and self.registrar_fecha.get() != "" and self.registrar_supervisor.get() != "" and self.registrar_gerente.get() != 0:
+		if self.registrar_nombre.get() != "" and self.registrar_telefono.get() !="" and self.registrar_sucursal != "" and self.registrar_fecha.get() != "" and self.registrar_supervisor.get() != "" and self.registrar_gerente.get() != "" and self.registrar_numero.get() != "" and self.registrar_zona.get() != "":
 			objeto=info()
-			compromar_001 = objeto.checar_nombre(self.registrar_nombre.get())
-			if values[1] != self.registrar_nombre.get() and compromar_001:
+			compromar_001 = objeto.checar_actualizacion(self._valor_id,self.registrar_numero.get(),self.registrar_nombre.get())
+			#values[1] != self.registrar_numero.get()
+			#if values[2] != self.registrar_nombre.get() or values[1] != self.registrar_numero.get():
+			print(compromar_001)
+			if compromar_001:
 				messagebox.showinfo("Error","El empleado ya esta registrado en la base de datos.")
 			else:
-				objeto.actualizar(self._valor_id,self.registrar_nombre.get(),self.registrar_telefono.get(),
-					self.registrar_sucursal.get(),self.registrar_fecha.get(),
+				objeto.actualizar(self._valor_id,self.registrar_numero.get(),self.registrar_nombre.get(),self.registrar_telefono.get(),
+					self.registrar_zona.get(),self.registrar_sucursal.get(),self.registrar_fecha.get(),
 					self.registrar_supervisor.get(),self.registrar_gerente.get())
 
 				self.registrar_nombre.delete(0, END); self.registrar_telefono.delete(0, END)
 				self.registrar_sucursal.delete(0, END); self.registrar_fecha.delete(0, END)
 				self.registrar_supervisor.delete(0, END); self.registrar_gerente.delete(0, END)
+				self.registrar_numero.delete(0,END); self.registrar_zona.delete(0,END)
 				self.top.destroy()
 				messagebox.showinfo("Completado","Actualizacion de datos completada.")
 				self.leer_info()

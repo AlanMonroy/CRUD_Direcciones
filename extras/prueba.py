@@ -1,30 +1,22 @@
-from tkinter import *
+from tkinter import * # Import tkinter
 
-root = Tk()
+class ScrollText:
+    def __init__(self):
+        window = Tk() # Create a window
+        window.title("Scroll Text Demo") # Set title
 
-red = Entry(root,bg="red")
-red.grid(row=0,column=0,padx=10,pady=10)
-white = Entry(root,bg="white")
-white.grid(row=1,column=0,padx=10,pady=10)
-blue = Entry(root, bg="blue")
-blue.grid(row=2,column=0,padx=10,pady=10)
+        frame1 = Frame(window)
+        frame1.pack()
+        scrollbar = Scrollbar(frame1)
+        scrollbar.pack(side = BOTTOM, fill = X)
+        text = Text(frame1, width = 40, height = 10, wrap = WORD,
+                    xscrollcommand = scrollbar.set)
+        text.pack()
+        scrollbar.config(command = text.xview)
 
-def btn_clicked():
-    top=Toplevel(root)
-    red1 = Entry(top,bg="red")
-    red1.grid(row=0,column=0,padx=10,pady=10)
-    red1.focus()
-    white1 = Entry(top,bg="white")
-    white1.grid(row=1,column=0,padx=10,pady=10)
-    blue2 = Entry(top, bg="blue")
-    blue2.grid(row=2,column=0,padx=10,pady=10)
+        window.mainloop() # Create an event loop
 
-boton = Button(root,text="Entrar",command=btn_clicked)
-boton.grid(row=3,column=0,padx=10,pady=10)
-
-
-root.mainloop()
-
+ScrollText() # Create GUI
 
 
 

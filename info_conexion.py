@@ -9,7 +9,7 @@ class info():
 
 	def orden_nombres(self):
 		info=self.db.cursor.execute(f"SELECT * FROM Direcciones").fetchall()
-		info.sort(key = lambda x: x[1])
+		info.sort(key = lambda x: x[2])
 		"""info=[]
 		for i in range(50):
 			valor=(i,"Alan","8111901788","guadalupe","12/23/23","roberto","victor")
@@ -25,9 +25,9 @@ class info():
 			return info
 
 		for i in info:
-			cadena_nombre = i[1].split(" ")
-			cadena_supervisor = i[5].split(" ")
-			cadena_gerente = i[6].split(" ")
+			cadena_nombre = i[2].split(" ")
+			cadena_supervisor = i[7].split(" ")
+			cadena_gerente = i[8].split(" ")
 			lista = [cadena_nombre,cadena_supervisor,cadena_gerente]
 
 			for a in i:
@@ -49,13 +49,16 @@ class info():
 		
 		return info1
 
-	def agregar_elementos(self, nombre, telefono, sucursal, fecha, supervisor, gerente):
-		self.db.cursor.execute(f"INSERT INTO Direcciones(nombre, telefono, sucursal, fecha_ingreso, supervisor, gerente) VALUES ('{nombre}', '{telefono}', '{sucursal}','{fecha}','{supervisor}','{gerente}')")
+	def agregar_elementos(self, numero,nombre, telefono, zona,sucursal, fecha, supervisor, gerente):
+		self.db.cursor.execute(f"INSERT INTO Direcciones(numero_empleado,nombre,telefono,zona,sucursal,fecha_ingreso,supervisor,gerente) VALUES ('{numero}','{nombre}', '{telefono}', '{zona}','{sucursal}','{fecha}','{supervisor}','{gerente}')")
 		self.db.cursor.commit()
 
-	def actualizar(self, identificador, nombre, telefono, sucursal, fecha, supervisor, gerente):
+	def actualizar(self, identificador, numero,nombre, telefono, zona,sucursal, fecha, supervisor, gerente):
+		print(numero)
+		self.db.cursor.execute("UPDATE Direcciones SET numero_empleado = ? WHERE Id = ?",numero,identificador)
 		self.db.cursor.execute("UPDATE Direcciones SET nombre = ? WHERE Id = ?",nombre,identificador)
 		self.db.cursor.execute("UPDATE Direcciones SET telefono = ? WHERE Id = ?",telefono,identificador)
+		self.db.cursor.execute("UPDATE Direcciones SET zona = ? WHERE Id = ?",zona,identificador)
 		self.db.cursor.execute("UPDATE Direcciones SET sucursal = ? WHERE Id = ?",sucursal,identificador)
 		self.db.cursor.execute("UPDATE Direcciones SET fecha_ingreso = ? WHERE Id = ?",fecha,identificador)
 		self.db.cursor.execute("UPDATE Direcciones SET supervisor = ? WHERE Id = ?",supervisor,identificador)
@@ -68,12 +71,42 @@ class info():
 			self.db.cursor.execute(f"DELETE FROM Direcciones WHERE Id = ?", valor)
 			self.db.cursor.commit()
 
-	def checar_nombre(self,nombre):
-		info=self.db.cursor.execute(f"SELECT * FROM Direcciones WHERE nombre = ?",nombre).fetchall()
-		if len(info) != 0:
+	def checar_nombre(self,numero,nombre,):
+		info=self.db.cursor.execute(f"SELECT * FROM Direcciones WHERE numero_empleado = ?",numero).fetchall()
+		info2=self.db.cursor.execute(f"SELECT * FROM Direcciones WHERE nombre = ?",nombre).fetchall()
+		
+		if len(info) != 0 or len(info2) != 0:
+			return f"Si esta"
+		"""if len(info) != 0:
 			for i in info:
-				if nombre == i[1]:
-					return f"Si esta"
+				print(i[1],i[2])
+				print(type(i[1]))
+				if nombre == i[2] or numero == i[1]:
+					return f"Si esta"""
+
+	def checar_actualizacion(self,identificador,numero,nombre,):
+		info=self.db.cursor.execute(f"SELECT * FROM Direcciones").fetchall()
+		identificador1 = int(identificador)
+
+		diccionario = {}
+		for i in info:
+			if i[0] != identificador1:
+				diccionario[f"{i[0]}"] = {"id":i[0],
+					"numero":i[1],
+					"nombre":i[2],
+					"telefono":i[3],
+					"zona":i[4],
+					"sucursal":i[5],
+					"fecha":i[6],
+					"supervisor":i[7],
+					"gerente":i[8],
+					}
+
+		for x in diccionario.values():
+			if nombre == x["nombre"]:
+				return f"Si esta {nombre}"
+			elif numero == x["numero"]:
+				return f"Si esta {numero}"
 
 	def exportar_archivo(self):
 		data_null={}
@@ -81,16 +114,18 @@ class info():
 		a = filedialog.asksaveasfilename(title="Abrir", initialdir = "C:/",filetypes = [("Archivo excel","*.xlsx")])
 
 		if a != "":
-			df_vacio = pd.DataFrame(columns=["Id","Nombre","Teléfono","Sucursal","Fecha de ingreso","Supervisor","Gerente"])
+			df_vacio = pd.DataFrame(columns=["Id","Número empleado","Nombre","Teléfono","Zona","Sucursal","Fecha de ingreso","Supervisor","Gerente"])
 			valores_to_excel2=self.db.cursor.execute(f"SELECT * FROM Direcciones").fetchall()
 			for i in valores_to_excel2:
 				df_vacio = df_vacio.append({"Id": i[0],
-								"Nombre": i[1],
-								"Teléfono":i[2],
-								"Sucursal":i[3],
-								"Fecha de ingreso":i[4],
-								"Supervisor":i[5],
-								"Gerente":i[6]}, ignore_index=True)
+								"Número empleado":i[1],
+								"Nombre": i[2],
+								"Teléfono":i[3],
+								"Zona":i[4],
+								"Sucursal":i[5],
+								"Fecha de ingreso":i[6],
+								"Supervisor":i[7],
+								"Gerente":i[8]}, ignore_index=True)
 
 			df_vacio.to_excel(f"{a}.xlsx",index=False)
 
@@ -99,5 +134,5 @@ class info():
 if __name__ == "__main__":
 	objeto=info()
 	obj = objeto.orden_nombres()
-	#print(objeto.checar_nombre("Alan"))
+	print(objeto.checar_actualizacion(16,"333","jose"))
 	objeto.buscar("ro")
