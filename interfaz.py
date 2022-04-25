@@ -82,6 +82,12 @@ class Interfaz:
 		#Frame horizontal de la interfaz (color negro)
 		tercerFrame = Frame(secondFrame, bg="black", width=self.w, height=70)
 		tercerFrame.grid(row=0,column=0,columnspan=self.w, sticky="e")
+		tercerFrame.grid_propagate(False)
+
+		valor001 = self.w/2.6
+
+		frame_001 = Label(tercerFrame,bg="black",text="Menú",fg="white",font=("Arial",24))
+		frame_001.grid(row=0,column=2,padx=valor001)
 		#Frame vertical
 		cuartoFrame = Frame(secondFrame, bg="black", height=self.h)
 		cuartoFrame.grid(row=1,column=0,rowspan=self.h)
@@ -91,13 +97,13 @@ class Interfaz:
 		quintoFrame.grid(row=1,column=2,rowspan=self.h)
 
 		self.img0 = PhotoImage(file = f"images/barra_menu.png")
-		self.boton_menu = Button(secondFrame,
+		self.boton_menu = Button(tercerFrame,
             image = self.img0,
             borderwidth = 0,
             highlightthickness = 0,
             command = self.menu_desplegable,
             relief = "flat", activebackground="black", bg="black", curso="hand2")
-		self.boton_menu.grid(row=0,column=1)
+		self.boton_menu.grid(row=0,column=1,padx=30)
 
 		self.boton_registrar_001 = ttk.Button(secondFrame, text=f"Registrar")
 		self.boton_registrar_001.grid(row=1,column=1, padx=10, pady=10)
@@ -285,12 +291,12 @@ class Interfaz:
 				seleccion = self.tabla.focus()
 				values = self.tabla.item(seleccion,"values")
 
-				if values =="":
+				if values =="": #Comprueba que algun valor de la tabla fue seleccionado
 					self.top.destroy()
 					messagebox.showinfo("Error","No ha seleccionado un registro")
 				else:
-					self._valor_id=values[0]
-					self.registrar_numero.insert(END,values[1])
+					self._valor_id=values[0]  #Aqui guarda el valor del ID para futuras operaciones
+					self.registrar_numero.insert(END,values[1])  #Se introducen toodos los valores de la tabla a los Entry's
 					self.registrar_nombre.insert(END,values[2])
 					self.registrar_telefono.insert(END,values[3])
 					self.registrar_zona.insert(END,values[4])
@@ -299,7 +305,7 @@ class Interfaz:
 					self.registrar_supervisor.insert(END,values[7])
 					self.registrar_gerente.insert(END,values[8])
 
-#Funciones
+#-------------------------------------Funciones----------------------------------------
 	def exportar0(self):  #Manda llamar la funcion exportar a excel
 		objeto=info()
 		objeto.exportar_archivo()
